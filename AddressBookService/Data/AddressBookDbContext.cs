@@ -19,6 +19,12 @@ namespace AddressBookService.Data
                 .HasOne(ab => ab.Address)
                 .WithOne(a => a.AddressBook)
                 .HasForeignKey<Address>(a => a.AddressBookId);
+
+            modelBuilder.Entity<AddressBook>()
+                .HasData(AddressBookStaticData.addressBooks);
+
+            modelBuilder.Entity<Address>()
+                .HasData(AddressStaticData.addresses);
         }
     }
 }
