@@ -8,6 +8,6 @@ namespace AddressBookService.Repository
 {
     public interface IAddressBookRepository
     {
-        Task<IEnumerable<AddressBookView>> GetAddressBooks();
+        Task<IEnumerable<AddressBookView>> GetGroupedAddressBooks();
     }
 }

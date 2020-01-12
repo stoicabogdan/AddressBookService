@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AddressBookService.Configuration;
 using AddressBookService.Data;
 using Microsoft.AspNetCore.Builder;
@@ -27,8 +23,10 @@ namespace AddressBookService
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ITelemetryTracker, TelemetryTracker>();
             services.AddDbContext<AddressBookDbContext>(
                  options => options.UseSqlServer(_configuration["SqlDbSettings:ConnectionString"]));
+            services.AddRepositories();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +38,8 @@ namespace AddressBookService
             }
 
             app.UseRouting();
+
+            app.UseMiddleware<ExceptionHandler>();
 
             app.UseEndpoints(endpoints =>
             {
