@@ -23,10 +23,12 @@ namespace AddressBookService
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplicationInsightsTelemetry(_configuration);
             services.AddTransient<ITelemetryTracker, TelemetryTracker>();
             services.AddDbContext<AddressBookDbContext>(
                  options => options.UseSqlServer(_configuration["SqlDbSettings:ConnectionString"]));
             services.AddRepositories();
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,12 +43,9 @@ namespace AddressBookService
 
             app.UseMiddleware<ExceptionHandler>();
 
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(endpoints => 
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllers();
             });
 
             app.EnsureMigrationOfContext<AddressBookDbContext>();
